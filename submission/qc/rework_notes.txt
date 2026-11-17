@@ -1,0 +1,2 @@
+Lượt đầu: 8/12 bẫy (66.7%), commit 04efb61; review 18:55-19:36, trừ nghỉ 5 phút = 36 phút.
+Lượt sửa bổ sung: 11/12 (91.7%) sau khi đã được thông báo các ảnh có lỗi. Đây là kiểm tra sửa lỗi có hướng dẫn, không thay thế kết quả review ban đầu. Còn missing ở img_004 và 12 khung dưới 20px. Chưa có thời gian thực làm bổ sung.
