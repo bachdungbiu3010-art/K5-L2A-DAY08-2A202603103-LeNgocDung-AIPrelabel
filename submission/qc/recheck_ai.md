@@ -28,3 +28,10 @@ Chi tiết: `recheck_ai_findings.csv`. Các nghi vấn chưa xác nhận không 
 ## Trạng thái
 
 Có ít nhất một lỗi cần sửa và hai điểm cần đối chiếu. Chưa có căn cứ nâng quyết định của học viên từ Rework lên Release. Giữ nguyên số liệu QC trước sửa 16/109 và 5/5; ghi riêng tái kiểm có AI hỗ trợ.
+
+## Cập nhật bản QC_Review ngày 2026-11-18, 12:20
+
+- File mới thực sự có sửa, dù vẫn 99 annotations: img_003 mở khung xe lên vùng mái; img_035 mở một khung xích lô lên vùng mui.
+- img_035 vẫn còn hai khung three_wheeler cho cùng xe: khung nhỏ bbox [745.55,428.01,68.98,34.25] và khung lớn [747.85,428.1,64.18,108.4]. Cần bỏ khung nhỏ nếu khung lớn đã bao đủ xe.
+- img_014 không thay đổi hình học hoặc lớp so với bản QC trước. Nghi vấn trùng người chưa được xác nhận là đã giải quyết; không tự xóa.
+- Nhãn các ảnh 006 và 031 không thay đổi. Bộ sửa mới vẫn 5 ảnh/99 annotations; Rework được giữ nguyên.

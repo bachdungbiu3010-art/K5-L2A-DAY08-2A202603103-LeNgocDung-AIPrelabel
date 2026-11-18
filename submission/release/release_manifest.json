@@ -3,8 +3,8 @@
  "images": 24,
  "objects": 549,
  "per_class": {
-  "person": 283,
   "motorbike": 146,
+  "person": 283,
   "bicycle": 9,
   "three_wheeler": 31,
   "car": 70,

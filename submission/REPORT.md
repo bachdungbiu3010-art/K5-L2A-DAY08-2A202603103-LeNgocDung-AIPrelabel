@@ -98,3 +98,10 @@ Các nhận xét dưới đây tổng hợp từ quan sát và phản hồi củ
 Việc tiếp theo theo quyết định Rework: tái kiểm bộ nhãn sau sửa và kiểm tra các ảnh ngoài mẫu; ghi riêng thời gian bổ sung và kết quả tái-QC, không thay số liệu QC ban đầu bằng kết quả sau sửa. Chưa nộp LMS.
 
 Cập nhật tái kiểm 2026-11-18: đã xem lại 5 ảnh sau sửa bằng AI hỗ trợ, còn lỗi/nghi vấn như `qc/recheck_ai.md`; nhãn chưa được sửa trong lượt kiểm tra này, quyết định Rework được giữ nguyên.
+
+## Cập nhật bản QC_Review ngày 2026-11-18, 12:20
+
+- File mới thực sự có sửa, dù vẫn 99 annotations: img_003 mở khung xe lên vùng mái; img_035 mở một khung xích lô lên vùng mui.
+- img_035 vẫn còn hai khung three_wheeler cho cùng xe: khung nhỏ bbox [745.55,428.01,68.98,34.25] và khung lớn [747.85,428.1,64.18,108.4]. Cần bỏ khung nhỏ nếu khung lớn đã bao đủ xe.
+- img_014 không thay đổi hình học hoặc lớp so với bản QC trước. Nghi vấn trùng người chưa được xác nhận là đã giải quyết; không tự xóa.
+- Nhãn các ảnh 006 và 031 không thay đổi. Bộ sửa mới vẫn 5 ảnh/99 annotations; Rework được giữ nguyên.
