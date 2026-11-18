@@ -1,0 +1,15 @@
+QC img_003.jpg - học viên kiểm trên CVAT, báo 5 vấn đề theo ID giao diện:
+- CVAT ID20: học viên báo motorbike bị gán three_wheeler. Cần đối chiếu vì screenshot khung đang chọn ID20 bao xe chở trái cây, không phải xe máy góc phải; chưa chuyển ID này thành object_id QC.
+- CVAT ID21: học viên báo thừa box; chờ ánh xạ sang ID bản release bằng vị trí/khung.
+- CVAT ID3: học viên báo chưa đủ chứng cứ gán three_wheeler; cần ghi là ca chưa chắc lớp, chưa tự đổi thành thua.
+- CVAT ID4: học viên báo khung chưa ôm sát; chờ đối chiếu ID QC.
+- CVAT ID5: học viên báo box dư; chờ đối chiếu ID QC.
+Học viên dự định sửa trong CVAT và xuất lại. Chưa nhận/xác minh bản qc_fixed. Phiếu QC ghi lỗi trước sửa, không chuyển thành khong chỉ vì đã sửa.
+
+
+Đã nhận QC_Review.zip: 5 ảnh, 97 annotations; validate_labels qc_fixed OK. So sánh với bộ mẫu QC trước sửa (109 đối tượng): img003 26->21, img006 27->26, img014 19->19, img031 4->3, img035 33->28.
+Đối chiếu hình học tham lam IoU>=0.5 (chỉ là ứng viên thay đổi, chưa tự coi toàn bộ là lỗi): img003 ID24 three_wheeler -> bicycle (cần xác nhận vì học viên trước đó nói motorbike); ID23 đổi khung IoU~0.55; ID6,7,20,21,22 không còn ghép được. img006 ID97 car không còn. img031 ID481 person không còn. img035 ID532,536,540,541,542 person không còn. img014 không thay đổi đáng kể, chưa xác nhận đã kiểm và không lỗi. Không dùng diff để khẳng định ground truth hoặc thay phản hồi học viên. Chưa chốt phiếu QC và quyết định chất lượng.
+
+Học viên xác nhận chọn bicycle cho vật mép phải img003 (ID24 bản QC trước sửa), phù hợp bản QC_Review. Học viên báo img014 còn thiếu 2 person, đã ghi 2 lỗi bo_sot bằng mã tạm riêng; chưa nhận khung bổ sung. Lý do xóa khung tại img006/img031/img035 vẫn chờ xác nhận.
+
+QC_Review.zip cập nhật: đủ 5 ảnh, 99 annotations; img014 tăng 19->21 với 2 person mới (ID67,68 trong bản xuất mới). Học viên xác nhận khung xóa ở img006,031,035 đều là thừa; đã điền phiếu theo ID của bộ QC trước sửa. Riêng img003 còn cần xác nhận nguyên nhân 5 khung three_wheeler bị xóa (ID gốc 6,7,20,21,22) và chỉnh khung ID23; không tự chốt phân loại lỗi từ diff. Chưa chạy qc_report để tránh báo cáo đầy đủ khi phiếu còn thiếu chi tiết.

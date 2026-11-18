@@ -1,0 +1,11 @@
+image,object_id,error_type,reviewer,note
+img_003.jpg,24,sai_lop,Lê Ngọc Dũng,"Học viên xác nhận vật bên mép phải là xe đạp; đổi three_wheeler thành bicycle trong bản QC_Review. ID24 là ID bộ QC trước sửa, không phải ID giao diện CVAT."
+img_014.jpg,missing_person_1,bo_sot,Lê Ngọc Dũng,"Học viên báo bỏ sót 2 người; bản QC_Review mới đã thêm 2 khung person. Mã tạm chỉ lỗi trước sửa, không phải ID CVAT."
+img_014.jpg,missing_person_2,bo_sot,Lê Ngọc Dũng,"Học viên báo bỏ sót 2 người; bản QC_Review mới đã thêm 2 khung person. Mã tạm chỉ lỗi trước sửa, không phải ID CVAT."
+img_006.jpg,97,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
+img_031.jpg,481,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
+img_035.jpg,532,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
+img_035.jpg,536,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
+img_035.jpg,540,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
+img_035.jpg,541,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
+img_035.jpg,542,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
