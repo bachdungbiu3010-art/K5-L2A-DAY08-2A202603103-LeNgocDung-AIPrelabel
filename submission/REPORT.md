@@ -33,20 +33,20 @@ Nguồn: `qc/review_stats.md` sau lượt sửa có hướng dẫn, trước s�
 
 - So với 73 đối tượng gold: TP=53, FP=21, FN=20; precision=53/74=71.6%, recall=53/73=72.6%. Đây là chất lượng pre-label máy, không phải độ chính xác của bộ nhãn đã sửa.
 - Lượt review ban đầu: accepted 479/521, edited 18/521, deleted 24/521, added 64/561; giữ riêng trong `qc/review_stats_round1.*`.
-- Lớp máy tệ nhất theo đánh giá của học viên: <<học viên kết luận dựa trên quan sát và số liệu>>.
+- Lớp máy tệ nhất theo đánh giá của học viên: Học viên chưa kết luận lớp tệ nhất. Các quan sát đã ghi gồm nhầm xe ba bánh thành car và các khung three_wheeler bị loại ở img_003; không tự suy một thứ hạng từ vài ví dụ..
 
 ## 3. Thiên kiến tự động hóa và ảnh bẫy
 
 - Lượt đầu chưa biết đáp án: 8/12=66.7%; loose 3/3, missing 2/3, wrong_class 3/3, extra 0/3. Lọt ở img_004 (missing), img_005/img_017/img_028 (extra).
 - Sau khi được chỉ các ảnh còn lỗi và sửa: script đạt 12/12=100%. Đây là sửa có hướng dẫn, không thay thế kết quả review ban đầu 8/12.
 - Các khung thiếu/thừa đã được người học sửa và kiểm tra qua file xuất; trường hợp img_004 từng có chênh lệch khung với tham chiếu được ghi ở `qc/rework_notes.txt`.
-- Vì sao lượt đầu lọt lỗi và accepted cao nói gì về cách duyệt: <<học viên tự nhận xét; không tự suy đoán đã bỏ bước nào>>.
+- Vì sao lượt đầu lọt lỗi và accepted cao nói gì về cách duyệt: Học viên muốn định hình trước tiêu chuẩn gán nhãn và những lỗi thường mắc rồi mới đánh giá sản phẩm AI. Chưa xác định cụ thể bước checklist nào đã bỏ qua trong lượt đầu..
 
 ## 4. Máy có đáng dùng không?
 
 - Từ `time_log.csv`: gold 32 phút/4 ảnh = 8 phút/ảnh; review lượt đầu 36 phút/24 ảnh = 1.5 phút/ảnh (18:55–19:36 trừ 5 phút nghỉ).
 - Chưa ghi thời gian thực làm các lượt sửa bổ sung/QC; không coi 1.5 phút/ảnh là tổng thời gian để tạo nhãn cuối. Hai nhóm ảnh khác nhau, người học đã quen quy tắc sau gold, nên không thể quy toàn bộ chênh lệch thời gian cho AI.
-- Kết luận của học viên: <<AI có đáng dùng không và lý do>>.
+- Kết luận của học viên: Cần định hình trước việc gán nhãn của bài và các lỗi thường mắc, sau đó mới đánh giá sản phẩm AI. Học viên chưa đưa kết luận có/không cho mọi lớp; chênh lệch thời gian lượt đầu chưa đủ để kết luận toàn bộ lợi ích vì chưa tính thời gian sửa..
 - Ba hành động kiểm tra rút từ quyết định học viên đã đưa ra: ghi chi tiết lỗi theo ảnh/model (CAL-03); điều chỉnh prompt rồi chạy lại khi mask sai (CAL-01); đối chiếu kết quả thực tế trước khi chấp nhận (CAL-01/CAL-03). Không lấy conf hoặc việc chạy xong làm bằng chứng đúng.
 
 ## 5. Mask SAM cho 3 vật (Part 5)
@@ -84,13 +84,15 @@ Các nhận xét dưới đây tổng hợp từ quan sát và phản hồi củ
 - Script kiểm tra cấu trúc, ảnh/lớp, kích thước box và tính số liệu từ phiếu. Script không tự xác minh lớp thực, độ ôm sát, bỏ sót cùng máy, hoặc người học đã thực hiện đủ checklist.
 - Gợi ý tự động: REWORK do 5/5 ảnh có lỗi và nhóm khung bị loại chiếm 12/16 lỗi. Đây là gợi ý trên lượt QC trước sửa, không phải kết luận tái-QC sau sửa.
 
-**Quyết định của học viên: <<Release / Hold / Rework và lý do>>**, ngày 2026-11-18.
+**Quyết định của học viên: Rework — tiếp tục kiểm tra sau sửa. QC ban đầu phát hiện lỗi ở 5/5 ảnh mẫu; đã sửa các lỗi xác định được nhưng chưa tái-QC đầy đủ, nên chưa xác nhận Release**, ngày 2026-11-18.
 
 ## 8. Ghi chú cá nhân
 
 - Dùng ChatGPT/Codex để hướng dẫn thao tác, kiểm tra file, chạy các script của bài, đối chiếu thay đổi và tổng hợp các nhận xét học viên cung cấp. Học viên trực tiếp gán gold, review, quan sát mask và đưa các quyết định calibration; lỗi QC được ghi theo phản hồi của học viên. Các lần dùng SAM/YOLO là nội dung bắt buộc của bài.
-- Gold có bị nhiễm trước khi gán xong không: <<học viên xác nhận>>.
+- Gold có bị nhiễm trước khi gán xong không: Không. Học viên xác nhận chưa xem nhãn máy hoặc nhờ AI xác định vật trên gold trước khi gán và xuất xong 4 ảnh..
 - Máy Windows, GPU tích hợp Intel UHD Graphics; model chạy trên Colab Tesla T4. CVAT Docker v2.82.0. Đã khắc phục lỗi 500 khi tạo Project do server v2.81.0 không khớp cơ sở dữ liệu đã cập nhật bằng v2.82.0; có sao lưu trước khi đưa server về v2.82.0.
 - Các lượt model dùng kết quả chạy thật trên Colab, không lấy từ `data/cache/`; nguồn `work/runs.csv`, `model_log.csv` và các ZIP đầu ra.
 - Không sửa thuật toán các script đo. Ghi nhận giới hạn của phép so khung tham chiếu ở img_004 trong `qc/rework_notes.txt`; giữ số đo script thực tế và ghi riêng kết quả lượt đầu/lượt sửa.
-- Một điều làm khác lần sau: <<nhận xét của học viên>>.
+- Một điều làm khác lần sau: Định hình trước tiêu chuẩn gán nhãn của bài và những lỗi thường mắc, sau đó mới đánh giá sản phẩm AI..
+
+Việc tiếp theo theo quyết định Rework: tái kiểm bộ nhãn sau sửa và kiểm tra các ảnh ngoài mẫu; ghi riêng thời gian bổ sung và kết quả tái-QC, không thay số liệu QC ban đầu bằng kết quả sau sửa. Chưa nộp LMS.

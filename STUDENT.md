@@ -16,4 +16,4 @@
 - Bắt bẫy: lượt đầu 8/12 = 66.7%; sau sửa có hướng dẫn 12/12 = 100%
 - Thời gian: gán tay 8 phút/ảnh; duyệt có pre-label 1.5 phút/ảnh ở lượt đầu; chưa gồm các lượt sửa
 - Lỗi QC: 100% theo ảnh (5/5, trước sửa), 14.7% theo đối tượng (16/109, trước sửa)
-- **Quyết định:** <<Release / Hold / Rework>> — lý do một dòng: <<...>>
+- **Quyết định:** Rework — lý do một dòng: QC trước sửa có lỗi ở 5/5 ảnh mẫu; đã sửa nhưng cần tiếp tục kiểm tra sau sửa, chưa xác nhận Release
