@@ -43,12 +43,18 @@
 
 ## 5. Mask SAM cho 3 vật (Part 5)
 
+Các nhận xét dưới đây tổng hợp từ quan sát và phản hồi của học viên khi chạy trên Colab T4.
+
 | Ảnh | SAM (phiên bản) | Số click | Mask gồm người lái / hàng hoá? | Lỗi quan sát | File trong `masks/` |
 |---|---|---|---|---|---|
-| <<img_0xx>> | <<>> | <<>> | <<>> | <<>> | <<>> |
+| img_013.jpg | SAM 2.1, sam2.1_b.pt | Bản v2: 3 dương + 4 âm = 7 | Vẫn gồm một phần người lái; chưa đánh giá hàng hóa riêng | Lần 3 tách tốt hơn lần 2 nhưng còn dính đầu và chân; một số phần xe bị thủng | tuktuk_img013_v2.jpg |
+| img_002.jpg | SAM 2.1, sam2.1_b.pt | Bản v2: 3 dương + 4 âm = 7 | Người lái được loại một phần, chưa sạch hoàn toàn; chưa đánh giá hàng hóa riêng | Ban đầu nghi lẫn mặt đường; xem mask đen trắng không thấy mảng tràn rõ xuống đường. Màu đường đỏ có sẵn gây nhầm với overlay | tuktuk_img002_v2.jpg |
+| img_004.jpg | SAM 2.1, sam2.1_b.pt | 3 dương + 2 âm = 5 | Không thấy gồm người đứng bên phải; chưa đánh giá hàng hóa riêng | Học viên nhận xét xe được bôi ổn nhưng vẫn khuyết một mảng nhỏ trên yên xe | tuktuk_img004.jpg |
 
-- Đối chiếu guideline mục 4.2: quy tắc nào giúp, quy tắc nào thiếu? <<>>
-- *(Tuỳ chọn)* Interactor SAM trong CVAT: làm được / không (lỗi gì, đã thử gì); khác gì offline: <<>>
+- Giữ thêm ba ảnh thử trước trong `masks/` để đối chiếu; tổng 6 ảnh JPG nhưng chỉ có **3 vật khác nhau**.
+- Lịch sử điểm click và các lần thử: `qc/mask_observations.txt`. Diện tích mask không phải độ chính xác của mask.
+- Đối chiếu guideline mục 4.2: <<học viên bổ sung quy tắc giúp ích và quy tắc còn thiếu>>.
+- Interactor SAM trong CVAT: chưa có bằng chứng đã thử; các kết quả trên chạy offline bằng script trên Colab.
 
 ## 6. Calibration (Part 6)
 

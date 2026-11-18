@@ -1,0 +1,15 @@
+Part 5 - SAM 2.1 sam2.1_b.pt, img_013.jpg, xe tuk-tuk:
+Lần 1: 2 điểm dương (400,480),(600,110); 1 điểm âm (720,300). 317255 px, 45.4% ảnh, 1 polygon; mask còn gồm người lái.
+Lần 2 - refined: 2 dương, 2 âm (thêm 740,430); 313162 px, 44.8%, 1 polygon. Học viên nhận xét vẫn dính người lái.
+Lần 3 - v2: 3 dương (400,480),(600,110),(450,600); 4 âm (720,230),(720,300),(700,360),(740,430); 276417 px, 39.6%, 1 polygon. Học viên nhận xét tách tốt hơn lần 2 nhưng vẫn dính ở chân và đầu. Ảnh màn hình còn cho thấy vùng xe có chỗ bị thủng; không suy chất lượng chỉ từ diện tích giảm.
+Ba lần trên là cùng một vật, không tính thành ba vật riêng.
+
+Part 5 - vật 2, img_002.jpg, tuktuk_img002: SAM 2.1; 3 điểm dương (480,560),(520,430),(470,620), 2 điểm âm (620,490),(750,550). Output màn hình: 49049 px, 7.0% ảnh, 1 polygon. Học viên nhận xét mask xe lẫn vào đường. Ảnh gốc có mảng mặt đường đỏ sẵn, nên chưa xác nhận mức tràn nền từ màu ảnh overlay; cần đối chiếu hoặc thử thêm điểm âm mặt đường.
+
+Vật 2 img_002 lần 2 (tuktuk_img002_v2): 3 điểm dương, 4 điểm âm; 45876 px, 6.6% ảnh, 1 polygon. Học viên nhận xét vẫn dính mặt đường. Chưa xác nhận trên mask nhị phân; cần tách ảnh mask khỏi màu đỏ sẵn của đường để đối chiếu.
+
+Đối chiếu vật 2 img_002 bằng mask nhị phân với cùng 3 điểm dương + 4 điểm âm: học viên xác nhận màu trắng chỉ còn ở xe; ảnh màn hình không thấy vùng trắng lan rõ xuống mặt đường. Nghi vấn tràn đường trước đó do màu đường đỏ sẵn gây nhầm với overlay. Chưa định lượng chất lượng biên hoặc khẳng định mask hoàn hảo.
+
+Part 5 - vật 3, img_004.jpg, tuktuk_img004: SAM sam2.1_b.pt, 3 điểm dương (650,260),(650,450),(710,530); 2 điểm âm (890,400),(600,620). Output screenshot 89004 px, 12.7% ảnh, 1 polygon. Học viên nhận xét xe tuk-tuk đã bôi ổn. Ảnh hiển thị cho thấy người đứng bên phải và mặt đường không bị tô vào mask; còn chi tiết thủng nhỏ bên trong, chưa đo độ chính xác biên.
+
+Bổ sung trực tiếp của học viên về img_004: mask vẫn khuyết một mảng nhỏ trên yên xe; không coi mask hoàn toàn chính xác. ZIP colab_outputs đã nhận, xác minh 6 ảnh JPG mở được, đại diện 3 vật khác nhau; các biến thể được giữ để so sánh.
