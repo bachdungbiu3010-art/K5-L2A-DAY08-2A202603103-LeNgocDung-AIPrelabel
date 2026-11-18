@@ -4,6 +4,15 @@
 
 # Day 08 Lab — 2A202603103 - Lê Ngọc Dũng
 
+## Kết quả bài cá nhân
+
+- Báo cáo chính: [submission/REPORT.md](submission/REPORT.md); thông tin và tóm tắt: [STUDENT.md](STUDENT.md).
+- Gold: 4 ảnh/73 đối tượng; batch đã review: 24 ảnh/559 đối tượng; sau sửa QC, bộ cuối: 24 ảnh/548 đối tượng.
+- Bẫy lượt đầu: 8/12; sau sửa có hướng dẫn: 12/12. QC ban đầu: 16/109 đối tượng, 5/5 ảnh có lỗi. Giữ riêng kết quả trước và sau sửa.
+- Đã thử mask SAM trên 3 vật, lưu 6 ảnh gồm các lần thử. Các hạn chế mask và tái kiểm 5 ảnh được nêu trong báo cáo.
+- Quyết định của học viên: **Rework**; chưa tái kiểm đầy đủ các ảnh ngoài mẫu và chưa xác nhận Release. Kiểm tra cấu trúc đạt không đồng nghĩa bộ nhãn không còn lỗi.
+
+
 <p align="center">
   <img alt="cá nhân" src="https://img.shields.io/badge/lab-cá%20nhân-0b1f3a">
   <img alt="thời lượng" src="https://img.shields.io/badge/thời%20lượng-4%20giờ-ff8a3d">
@@ -67,7 +76,6 @@ flowchart LR
 4. Trên lớp làm theo **[GUIDE.md](GUIDE.md)** từ **Part 1** (gán tay 4 ảnh gold, *chưa* chạy model nào lên ảnh gold!).
 5. Chạy `python scripts/check_submission.py` trước khi nộp.
 
-> **Khi nộp:** đổi dòng tiêu đề này thành `# Day 08 Lab — <MSHV> - <Họ và tên>`. Xem [SUBMISSION.md](SUBMISSION.md).
 
 ## CVAT: hai cách dùng AI
 

@@ -1,121 +1,135 @@
 # Báo cáo Day 08 — 2A202603103 - Lê Ngọc Dũng
 
-> Một file duy nhất cho cả bài (đã gộp recipe, QC và ghi chú cá nhân). Mọi con số kèm **mẫu số** và nguồn (file nào). Viết bằng lời của bạn.
+Bài cá nhân. Kết quả dưới đây phân biệt lượt review ban đầu, các lượt sửa có hướng dẫn, QC trước sửa và bộ nhãn cuối. Quyết định của tôi: **Rework**. Chưa nộp LMS.
 
 ## 1. Model và recipe (Part 2–3)
 
-| Lớp | Model + cỡ | Ngưỡng | Nguồn và cách dùng |
-|---|---|---|---|
-| person / bicycle / motorbike / car / bus / truck | YOLO26m | 0.30 | r01/r02 trong model_log.csv là các lượt thử; threshold_sweep.md không gợi ý ngưỡng riêng đạt mục tiêu cho các lớp này. bus/truck có quá ít vật gold. |
-| three_wheeler | YOLOE-s; prompt tuk-tuk, cyclo, cargo tricycle | 0.15 | r03 là lượt thử; threshold_sweep.md gợi ý 0.15 trên 7 vật gold, recall 100%, precision 78%. |
+Tôi thử YOLO26m ở hai ngưỡng, YOLOE tìm xe ba bánh và YOLO26 kết hợp SAM. Nhật ký: [model_log.csv](model_log.csv).
 
-Lệnh gộp đã chạy trên máy:
+| Run | Cấu hình thử | Kết quả thực chạy |
+|---|---|---|
+| r01 | YOLO26m, pilot, conf=0.25 | 215 box/8 ảnh; 1.30 giây/ảnh |
+| r02 | YOLO26m, pilot, conf=0.50 | 139 box/8 ảnh; 0.33 giây/ảnh |
+| r03 | YOLOE-s, chỉ three_wheeler, conf=0.25 | 8 box/8 ảnh; 0.19 giây/ảnh |
+| r04 | YOLO26m + SAM 2.1, conf=0.30 | 16 box có mask/2 ảnh; 1.65 giây/ảnh |
+
+Trên img_011, tôi nhận xét lượt 0.50 nhận đủ car và bỏ các người nhỏ so với lượt 0.25; kích thước dưới 20 pixel trong nhận xét này chưa được đo riêng trên ảnh gốc. YOLOE chỉ tìm three_wheeler nên không gán person/car/motorbike không được tính là bỏ sót các lớp đó. Lượt r04 chỉ yêu cầu person, motorbike, car; SAM không tự sửa tên lớp sai của detector.
+
+Sau đó, tôi chạy cả 36 ảnh ở conf=0.05 để có nguồn chọn ngưỡng. Theo [threshold_sweep.md](qc/threshold_sweep.md):
+
+| Lớp | Nguồn model | Ngưỡng dùng | Căn cứ trên gold |
+|---|---|---|---|
+| person | YOLO26m | 0.30 mặc định | 36 vật; recall cao nhất trong các ngưỡng thử là 81%, chưa đạt mục tiêu 90% |
+| bicycle | YOLO26m | 0.30 mặc định | 5 vật; recall cao nhất 60%, chưa đạt 90% |
+| motorbike | YOLO26m | 0.30 mặc định | 16 vật; recall cao nhất 88%, chưa đạt 90% |
+| car | YOLO26m | 0.30 mặc định | 8 vật; recall cao nhất 88%, chưa đạt 90% |
+| bus / truck | YOLO26m | 0.30 mặc định | Chỉ 1/0 vật gold; không đủ mẫu để chọn ngưỡng riêng |
+| three_wheeler | YOLOE-s; tuk-tuk, cyclo, cargo tricycle | 0.15 | 7 vật gold; recall 7/7=100%, precision 7/9=77.8% |
+
+Lệnh gộp đã chạy:
 
 ```text
 python scripts/merge_prelabels.py work/prelabel/yoloe_all/pre.coco.json work/prelabel/y26_all/pre.coco.json --thr "three_wheeler=0.15" --conf 0.3 --iou 0.6 --split "batch,gold" --out work/prelabel/merged_review/pre.coco.json
 ```
 
-- SAM dùng SAM 2.1 (`sam2.1_b.pt`) theo lựa chọn khuyến nghị của tài liệu. Chạy trên GPU T4, các lần thử và hạn chế được ghi tại mục 5; chưa thử SAM 1/3 để so sánh.
-- Theo quan sát của học viên, img_013 có xe ba bánh bị gọi car. CAL-03 yêu cầu tìm nguyên nhân, gán lại nhãn và ghi chi tiết lỗi; chỉ thay ngưỡng không tự đổi tên lớp.
-- Ví dụ điểm cao vẫn cần kiểm tra: ở ảnh QC img_003, hai khung three_wheeler #19 (0.90), #20 (0.80) chồng lên cùng xe; khung #20 đã bị loại trong lượt sửa QC. Điểm cao không chứng minh hai khung là hai vật khác nhau.
-- Ngưỡng được chọn và đánh giá trên cùng 4 ảnh gold nên số đo lạc quan; mẫu nhỏ không đại diện toàn bộ bộ ảnh.
+Tôi dùng SAM 2.1 (`sam2.1_b.pt`) theo bản khuyến nghị của bài, chạy trên Colab T4; chưa thử SAM 1/3 nên không kết luận bản nào tốt nhất. Lỗi xe ba bánh bị gọi car ở img_013 cần kiểm tra và sửa lớp, không thể chỉ đổi ngưỡng để tự đổi tên lớp. Ví dụ điểm cao vẫn sai: bộ QC trước sửa ở img_003 có hai khung three_wheeler #19 (0.90), #20 (0.80) chồng lên cùng xe; một khung phải bị loại.
+
+Ngưỡng được chọn và đánh giá trên cùng 4 ảnh gold nên số đo lạc quan. Đây là ước lượng trên mẫu nhỏ, không bảo đảm kết quả trên toàn bộ ảnh.
 
 ## 2. AI error profile
 
-Nguồn: `qc/review_stats.md` sau lượt sửa có hướng dẫn, trước sửa QC. Script loại vùng bẫy khỏi bảng chất lượng máy; mẫu số khác tổng annotations.
+Nguồn: [review_stats.md](qc/review_stats.md), đo trên `batch_reviewed.json` sau sửa có hướng dẫn, **trước sửa QC**. Script đã loại 22 đối tượng quanh bẫy khỏi bảng chất lượng máy để lỗi nhân tạo không bị tính là chất lượng model.
 
 | Trạng thái | Số | Tỉ lệ | Mẫu số |
 |---|---|---|---|
-| accepted | 465 | 89.3% | 521 box máy |
-| edited | 19 | 3.6% | 521 box máy |
-| deleted | 37 | 7.1% | 521 box máy |
+| accepted | 465 | 89.3% | 521 box máy trong phép đo |
+| edited | 19 | 3.6% | 521 box máy trong phép đo |
+| deleted | 37 | 7.1% | 521 box máy trong phép đo |
 | added | 64 | 11.7% | 548 đối tượng sau duyệt trong phép đo |
 
-- So với 73 đối tượng gold: TP=53, FP=21, FN=20; precision=53/74=71.6%, recall=53/73=72.6%. Đây là chất lượng pre-label máy, không phải độ chính xác của bộ nhãn đã sửa.
-- Lượt review ban đầu: accepted 479/521, edited 18/521, deleted 24/521, added 64/561; giữ riêng trong `qc/review_stats_round1.*`.
-- Lớp máy tệ nhất theo đánh giá của học viên: Học viên chưa kết luận lớp tệ nhất. Các quan sát đã ghi gồm nhầm xe ba bánh thành car và các khung three_wheeler bị loại ở img_003; không tự suy một thứ hạng từ vài ví dụ..
+Trong 64 đối tượng added, có 6 trường hợp đổi lớp; script ước tính 58 vật bị máy sót thực sự. Accepted cao không có nghĩa là máy không bỏ sót.
+
+Theo trải nghiệm của tôi, **xe ba bánh là lớp dễ bị gán sai nhất**: dễ nhầm với xe đạp và có trường hợp một xe bị AI tách thành hai khung cho hai bộ phận. Ví dụ img_003 và xe xích lô ở img_035. Đây là nhận xét từ quan sát, không phải xếp hạng khách quan trên một test set độc lập.
+
+So với 73 đối tượng gold: TP=53, FP=21, FN=20; precision=53/74=71.6%, recall=53/73=72.6%. Đây là chất lượng pre-label máy, không phải độ chính xác của nhãn cuối. Gold không được đưa vào Task review.
+
+Để giữ đúng lịch sử, lượt review đầu còn ở [review_stats_round1.md](qc/review_stats_round1.md): accepted 479/521, edited 18/521, deleted 24/521, added 64/561. Các mẫu số trong error profile không phải tổng số annotation của bộ release cuối.
 
 ## 3. Thiên kiến tự động hóa và ảnh bẫy
 
-- Lượt đầu chưa biết đáp án: 8/12=66.7%; loose 3/3, missing 2/3, wrong_class 3/3, extra 0/3. Lọt ở img_004 (missing), img_005/img_017/img_028 (extra).
-- Sau khi được chỉ các ảnh còn lỗi và sửa: script đạt 12/12=100%. Đây là sửa có hướng dẫn, không thay thế kết quả review ban đầu 8/12.
-- Các khung thiếu/thừa đã được người học sửa và kiểm tra qua file xuất; trường hợp img_004 từng có chênh lệch khung với tham chiếu được ghi ở `qc/rework_notes.txt`.
-- Vì sao lượt đầu lọt lỗi và accepted cao nói gì về cách duyệt: Học viên muốn định hình trước tiêu chuẩn gán nhãn và những lỗi thường mắc rồi mới đánh giá sản phẩm AI. Chưa xác định cụ thể bước checklist nào đã bỏ qua trong lượt đầu..
+Lượt đầu chưa biết đáp án, tôi bắt được **8/12=66.7%**: loose 3/3, missing 2/3, wrong_class 3/3, extra 0/3. Lọt missing ở img_004 và extra ở img_005, img_017, img_028.
+
+Tôi nhận thấy nguyên nhân là **kiểm tra chưa kỹ và chủ quan tin vào AI**. Tôi không xác định được một bước checklist cụ thể đã bỏ qua, nên không ghi là đã bỏ bước nào khi chưa chắc.
+
+Sau khi được thông báo vị trí lỗi và sửa, script đạt **12/12=100%**. Đây là kết quả sửa có hướng dẫn, không thay thế số đo ban đầu. Lượt đầu accepted 479/521=91.9% nhưng extra chỉ bắt 0/3 cho thấy giữ nhiều khung chưa đồng nghĩa với kiểm tra kỹ. Chi tiết các lượt sửa: [rework_notes.txt](qc/rework_notes.txt).
 
 ## 4. Máy có đáng dùng không?
 
-- Từ `time_log.csv`: gold 32 phút/4 ảnh = 8 phút/ảnh; review lượt đầu 36 phút/24 ảnh = 1.5 phút/ảnh (18:55–19:36 trừ 5 phút nghỉ).
-- Chưa ghi thời gian thực làm các lượt sửa bổ sung/QC; không coi 1.5 phút/ảnh là tổng thời gian để tạo nhãn cuối. Hai nhóm ảnh khác nhau, người học đã quen quy tắc sau gold, nên không thể quy toàn bộ chênh lệch thời gian cho AI.
-- Kết luận của học viên: Cần định hình trước việc gán nhãn của bài và các lỗi thường mắc, sau đó mới đánh giá sản phẩm AI. Học viên chưa đưa kết luận có/không cho mọi lớp; chênh lệch thời gian lượt đầu chưa đủ để kết luận toàn bộ lợi ích vì chưa tính thời gian sửa..
-- Ba hành động kiểm tra rút từ quyết định học viên đã đưa ra: ghi chi tiết lỗi theo ảnh/model (CAL-03); điều chỉnh prompt rồi chạy lại khi mask sai (CAL-01); đối chiếu kết quả thực tế trước khi chấp nhận (CAL-01/CAL-03). Không lấy conf hoặc việc chạy xong làm bằng chứng đúng.
+**Theo trải nghiệm của tôi, AI đáng dùng để gán nhãn trước vì giúp nhanh hơn, nhưng phải kiểm tra kỹ.** Theo [time_log.csv](time_log.csv), gold mất 32 phút/4 ảnh=8 phút/ảnh; review lượt đầu mất 36 phút/24 ảnh=1.5 phút/ảnh. Thời gian review là 18:55–19:36, trừ 5 phút nghỉ.
+
+Tôi chưa ghi thời gian thực làm các lượt sửa bổ sung và QC. Hai nhóm ảnh khác nhau và tôi đã quen quy tắc sau khi gán gold, nên không coi chênh lệch 8 so với 1.5 phút/ảnh là mức tiết kiệm của toàn bộ quy trình.
+
+Ba hành động kiểm tra rút từ quyết định của tôi, dùng để giảm việc tin máy quá mức:
+
+1. Ghi lỗi cụ thể theo ảnh, vật và model thay vì chấp nhận chỉ vì conf cao (CAL-03).
+2. Nếu mask dính người, điều chỉnh điểm gợi ý/khung rồi chạy lại; giữ các lần thử để so sánh (CAL-01).
+3. Đối chiếu ảnh gốc và kết quả, dùng mask đen trắng khi màu overlay gây nhầm; chỉ chấp nhận sau khi kiểm tra, không lấy việc chạy xong làm bằng chứng đúng (CAL-01, ví dụ img_002).
+
+Lần sau tôi sẽ định hình trước tiêu chuẩn gán nhãn và những lỗi hay mắc rồi mới đánh giá sản phẩm AI.
 
 ## 5. Mask SAM cho 3 vật (Part 5)
 
-Các nhận xét dưới đây tổng hợp từ quan sát và phản hồi của học viên khi chạy trên Colab T4.
-
-| Ảnh | SAM (phiên bản) | Số click | Mask gồm người lái / hàng hoá? | Lỗi quan sát | File trong `masks/` |
+| Ảnh | Model | Số click ở bản giữ lại | Người lái/hàng hóa | Lỗi quan sát | File |
 |---|---|---|---|---|---|
-| img_013.jpg | SAM 2.1, sam2.1_b.pt | Bản v2: 3 dương + 4 âm = 7 | Vẫn gồm một phần người lái; chưa đánh giá hàng hóa riêng | Lần 3 tách tốt hơn lần 2 nhưng còn dính đầu và chân; một số phần xe bị thủng | tuktuk_img013_v2.jpg |
-| img_002.jpg | SAM 2.1, sam2.1_b.pt | Bản v2: 3 dương + 4 âm = 7 | Người lái được loại một phần, chưa sạch hoàn toàn; chưa đánh giá hàng hóa riêng | Ban đầu nghi lẫn mặt đường; xem mask đen trắng không thấy mảng tràn rõ xuống đường. Màu đường đỏ có sẵn gây nhầm với overlay | tuktuk_img002_v2.jpg |
-| img_004.jpg | SAM 2.1, sam2.1_b.pt | 3 dương + 2 âm = 5 | Không thấy gồm người đứng bên phải; chưa đánh giá hàng hóa riêng | Học viên nhận xét xe được bôi ổn nhưng vẫn khuyết một mảng nhỏ trên yên xe | tuktuk_img004.jpg |
+| img_013.jpg | SAM 2.1, sam2.1_b.pt | 3 dương + 4 âm=7 | Vẫn gồm một phần người lái; chưa đánh giá hàng hóa riêng | Lần 3 tốt hơn lần 2 nhưng còn dính đầu/chân và thủng một số phần xe | [tuktuk_img013_v2.jpg](masks/tuktuk_img013_v2.jpg) |
+| img_002.jpg | SAM 2.1, sam2.1_b.pt | 3 dương + 4 âm=7 | Người lái được loại một phần, chưa sạch hoàn toàn; chưa đánh giá hàng hóa riêng | Ban đầu nghi lẫn đường; mask đen trắng không cho thấy mảng lan rõ xuống đường. Màu đường đỏ sẵn gây nhầm với overlay | [tuktuk_img002_v2.jpg](masks/tuktuk_img002_v2.jpg) |
+| img_004.jpg | SAM 2.1, sam2.1_b.pt | 3 dương + 2 âm=5 | Không thấy gồm người đứng bên phải; chưa đánh giá hàng hóa riêng | Bao phần lớn xe nhưng còn khuyết một mảng nhỏ trên yên xe | [tuktuk_img004.jpg](masks/tuktuk_img004.jpg) |
 
-- Giữ thêm ba ảnh thử trước trong `masks/` để đối chiếu; tổng 6 ảnh JPG nhưng chỉ có **3 vật khác nhau**.
-- Lịch sử điểm click và các lần thử: `qc/mask_observations.txt`. Diện tích mask không phải độ chính xác của mask.
-- Đối chiếu guideline mục 4.2: CAL-01 bổ sung việc ghi lỗi mask dính người, điều chỉnh prompt và kiểm tra lại; CAL-02 chốt phạm vi mask xe chở trái cây có gồm hàng nhô ra. Chưa mở rộng quyết định trái cây cho mọi loại hàng..
-- Interactor SAM trong CVAT: chưa có bằng chứng đã thử; các kết quả trên chạy offline bằng script trên Colab.
+Có tổng 6 ảnh JPG nhưng chỉ **3 vật khác nhau**; 3 ảnh còn lại là các bản thử trước. Chi tiết: [mask_observations.txt](qc/mask_observations.txt). Diện tích mask không phải độ chính xác của mask.
+
+Đối chiếu mục 4.2 của guideline: các lỗi dính người và thủng phần xe cho thấy cần kiểm tra đường biên phần nhìn thấy, không chỉ diện tích hoặc hình dáng chung. CAL-01 bổ sung bước ghi lỗi/chạy lại/kiểm tra; CAL-02 chốt phạm vi mask của ca xe chở trái cây. Chưa tạo mask img_003 để kiểm chứng quy tắc trái cây. Không thử SAM Interactor trong CVAT; các mask trên chạy offline bằng Colab.
 
 ## 6. Calibration (Part 6)
 
-- Đã ghi 3 quyết định do học viên đưa ra trong `qc/calibration_decisions.csv`:
-  - CAL-01 (`loi_may`, img_013): ghi rõ mask dính người, điều chỉnh điểm gợi ý/khung cho SAM, chạy lại và kiểm tra.
-  - CAL-02 (`cau_hoi_mo`, img_003): mask xe chở trái cây gồm thân xe, thùng cố định và cả trái cây nhô ra; không thay quy tắc box.
-  - CAL-03 (`loi_may`, img_013): tìm nguyên nhân xe ba bánh bị gọi car, gán lại nhãn và ghi chi tiết lỗi; điểm cao không thay thế kiểm tra thực tế.
-- Các bổ sung đã ghi trong `guidelines/guideline_v1.1_calibrated.md`; những câu hỏi mở khác của v1.0 chưa được chốt.
-- Học viên chưa xếp hạng các quyết định hoặc kết luận nguyên nhân gốc; các quan sát và hành động đã ghi ở từng CAL, không coi giả thuyết về model là nguyên nhân đã chứng minh.
+Đã ghi 3 quyết định do tôi đưa ra trong [calibration_decisions.csv](qc/calibration_decisions.csv) và chuyển vào [guideline v1.1](guidelines/guideline_v1.1_calibrated.md):
+
+| Mã | Nguồn | Ảnh | Quyết định |
+|---|---|---|---|
+| CAL-01 | loi_may | img_013 | Ghi rõ lỗi mask dính người; điều chỉnh điểm gợi ý/khung, chạy lại và kiểm tra |
+| CAL-02 | cau_hoi_mo | img_003 | Mask xe chở trái cây gồm thân xe, thùng cố định và trái cây nhô ra; không thay quy tắc box |
+| CAL-03 | loi_may | img_013 | Tìm nguyên nhân nhận sai lớp, gán lại nhãn và ghi lỗi; không chấp nhận chỉ dựa vào conf |
+
+CAL-02 giải quyết câu hỏi còn mở về phạm vi hàng hóa trong mask; CAL-01/CAL-03 xử lý lỗi quan sát của máy, không phải đổi định nghĩa mọi lớp để hợp thức hóa nhãn. Tôi chưa kết luận nguyên nhân kỹ thuật gốc hoặc xếp hạng quyết định quan trọng nhất. Các câu hỏi mở khác của v1.0 chưa được chốt. Bộ taxonomy dùng cho script vẫn v1.0, có guideline bổ sung v1.1; mục `rules` không thay đổi.
 
 ## 7. QC và quyết định (Part 6)
 
-- Mẫu trước sửa: 5/24 ảnh batch, 0 ảnh can_review + 5 ảnh ngẫu nhiên, seed 42; 109 đối tượng. Người kiểm: Lê Ngọc Dũng, cũng là người duyệt nên chưa có kiểm tra độc lập.
-- Theo `qc/qc_review.csv` và `qc/qc_report_auto.md`: lỗi theo đối tượng 16/109=14.7%; ảnh có lỗi 5/5=100.0%. Đây là QC trước sửa.
-- Các loại lỗi: 12 khung thừa/bị loại (ví dụ img_003, img_006, img_031, img_035), 2 người bỏ sót (img_014), 1 sai lớp (img_003: three_wheeler đổi bicycle), 1 sai vị trí/kích thước (img_003). Nhóm khung bị loại gồm cả trường hợp học viên thấy chưa đủ căn cứ gán; không khẳng định đã biết lớp thật của mọi vật đó.
-- Bản sửa mới nhất `labels/qc_fixed.json` có 5 ảnh, 98 đối tượng; đã bổ sung 2 person ở img_014. `release/final_det.coco.json` đã thay 5 ảnh này vào bộ 24 ảnh, tổng 548 đối tượng.
-- Đã có lượt xem lại 5 ảnh sau sửa bằng Codex (AI hỗ trợ), ghi riêng ở `qc/recheck_ai.md` và `qc/recheck_ai_findings.csv`: phát hiện xe xích lô img_035 bị chia thành hai khung; cần đối chiếu thêm mái xe img_003 và nghi trùng người img_014. Đây không phải lượt tái-QC độc lập do người khác thực hiện. Không đổi phiếu trước sửa thành không lỗi và không coi kiểm tra JSON là chứng minh chất lượng nhãn đã đạt.
-- Mẫu chỉ có 5 ảnh; Wilson cận trên 95% của tỷ lệ ảnh lỗi trước sửa là 100%. Không thể dùng mẫu này chứng minh tỷ lệ lỗi toàn bộ bộ ảnh <=2%.
-- Script kiểm tra cấu trúc, ảnh/lớp, kích thước box và tính số liệu từ phiếu. Script không tự xác minh lớp thực, độ ôm sát, bỏ sót cùng máy, hoặc người học đã thực hiện đủ checklist.
-- Gợi ý tự động: REWORK do 5/5 ảnh có lỗi và nhóm khung bị loại chiếm 12/16 lỗi. Đây là gợi ý trên lượt QC trước sửa, không phải kết luận tái-QC sau sửa.
+Mẫu QC gồm 5/24 ảnh batch: 0 ảnh can_review và 5 ảnh ngẫu nhiên, seed 42; 109 đối tượng trước sửa. Tôi vừa duyệt vừa kiểm tra nên chưa có QC độc lập bởi người khác. Mẫu và phiếu: [qc_sample.csv](qc/qc_sample.csv), [qc_review.csv](qc/qc_review.csv).
 
-**Quyết định của học viên: Rework — tiếp tục kiểm tra sau sửa. QC ban đầu phát hiện lỗi ở 5/5 ảnh mẫu; đã sửa các lỗi xác định được nhưng chưa tái-QC đầy đủ, nên chưa xác nhận Release**, ngày 2026-11-18.
+Theo [qc_report_auto.md](qc/qc_report_auto.md), QC trước sửa có **16/109=14.7% theo đối tượng**, và **5/5=100% theo ảnh**. Có 12 khung thừa/bị loại (img_003, 006, 031, 035), 2 người bỏ sót (img_014), 1 sai lớp (img_003: three_wheeler thành bicycle) và 1 sai khung (img_003). Nhóm bị loại bao gồm cả ca tôi thấy chưa đủ căn cứ gán lớp; không khẳng định đã xác định được lớp thật của mọi vật đó.
+
+| Ảnh QC | Trước sửa | Bản cuối | Xử lý đã ghi nhận |
+|---|---:|---:|---|
+| img_003 | 26 | 21 | Loại khung dư/thiếu căn cứ; sửa bicycle; chỉnh khung xe bao mái |
+| img_006 | 27 | 26 | Xóa khung car thừa |
+| img_014 | 19 | 21 | Thêm 2 person; hai người từng bị nghi trùng được tôi xác nhận là người khác nhau |
+| img_031 | 4 | 3 | Xóa khung person thừa |
+| img_035 | 33 | 27 | Xóa các person thừa; gộp hình học xe xích lô vào một khung, bỏ khung mui dư |
+| Tổng | 109 | 98 | Không thay phiếu QC trước sửa bằng số liệu sau sửa |
+
+Bản [qc_fixed.json](labels/qc_fixed.json) có 5 ảnh/98 đối tượng. Script thay 5 ảnh này vào batch 24 ảnh/559 đối tượng, cho bộ [release cuối](release/final_det.coco.json) gồm **24 ảnh/548 đối tượng**: 559−109+98=548.
+
+Lượt tái kiểm có Codex hỗ trợ đã đối chiếu các sửa đổi ở mái xe img_003, khung xích lô img_035 và xác nhận của tôi về người ở img_014. Chưa thấy lỗi rõ ràng mới trong lượt rà tổng thể 5 ảnh, nhưng đây không phải phép đo tỷ lệ lỗi sau sửa, không phải QC độc lập của người thứ hai và không chứng minh toàn bộ 24 ảnh sạch lỗi. Chi tiết trạng thái cuối: [recheck_ai.md](qc/recheck_ai.md).
+
+Script QC gợi ý REWORK trên số liệu trước sửa vì 5/5 ảnh có lỗi và nhóm khung bị loại chiếm 12/16 lỗi. Cận trên 95% Wilson của tỷ lệ ảnh lỗi trước sửa là 100%; mẫu 5 ảnh không thể chứng minh tỷ lệ lỗi toàn bộ bộ ảnh <=2%. Script kiểm cấu trúc và đếm theo phiếu, không tự xác nhận lớp thực, độ ôm sát hoặc vật mà cả người lẫn máy cùng bỏ sót.
+
+**Quyết định của tôi: Rework**, ngày 2026-11-18. Các lỗi đã xác định đã được sửa; tôi giữ quyết định này vì chưa tái kiểm đầy đủ các ảnh ngoài mẫu và chưa có căn cứ xác nhận Release. Việc tiếp theo là rà tiếp các ảnh ngoài mẫu, ghi thời gian bổ sung và kết quả kiểm tra riêng.
 
 ## 8. Ghi chú cá nhân
 
-- Dùng ChatGPT/Codex để hướng dẫn thao tác, kiểm tra file, chạy các script của bài, đối chiếu thay đổi và tổng hợp các nhận xét học viên cung cấp. Học viên trực tiếp gán gold, review, quan sát mask và đưa các quyết định calibration; lỗi QC được ghi theo phản hồi của học viên. Các lần dùng SAM/YOLO là nội dung bắt buộc của bài.
-- Gold có bị nhiễm trước khi gán xong không: Không. Học viên xác nhận chưa xem nhãn máy hoặc nhờ AI xác định vật trên gold trước khi gán và xuất xong 4 ảnh..
-- Máy Windows, GPU tích hợp Intel UHD Graphics; model chạy trên Colab Tesla T4. CVAT Docker v2.82.0. Đã khắc phục lỗi 500 khi tạo Project do server v2.81.0 không khớp cơ sở dữ liệu đã cập nhật bằng v2.82.0; có sao lưu trước khi đưa server về v2.82.0.
-- Các lượt model dùng kết quả chạy thật trên Colab, không lấy từ `data/cache/`; nguồn `work/runs.csv`, `model_log.csv` và các ZIP đầu ra.
-- Không sửa thuật toán các script đo. Ghi nhận giới hạn của phép so khung tham chiếu ở img_004 trong `qc/rework_notes.txt`; giữ số đo script thực tế và ghi riêng kết quả lượt đầu/lượt sửa.
-- Một điều làm khác lần sau: Định hình trước tiêu chuẩn gán nhãn của bài và những lỗi thường mắc, sau đó mới đánh giá sản phẩm AI..
-
-Việc tiếp theo theo quyết định Rework: tái kiểm bộ nhãn sau sửa và kiểm tra các ảnh ngoài mẫu; ghi riêng thời gian bổ sung và kết quả tái-QC, không thay số liệu QC ban đầu bằng kết quả sau sửa. Chưa nộp LMS.
-
-Cập nhật tái kiểm 2026-11-18: đã xem lại 5 ảnh sau sửa bằng AI hỗ trợ, còn lỗi/nghi vấn như `qc/recheck_ai.md`; nhãn chưa được sửa trong lượt kiểm tra này, quyết định Rework được giữ nguyên.
-
-## Cập nhật bản QC_Review ngày 2026-11-18, 12:20
-
-- File mới thực sự có sửa, dù vẫn 99 annotations: img_003 mở khung xe lên vùng mái; img_035 mở một khung xích lô lên vùng mui.
-- img_035 vẫn còn hai khung three_wheeler cho cùng xe: khung nhỏ bbox [745.55,428.01,68.98,34.25] và khung lớn [747.85,428.1,64.18,108.4]. Cần bỏ khung nhỏ nếu khung lớn đã bao đủ xe.
-- img_014 không thay đổi hình học hoặc lớp so với bản QC trước. Nghi vấn trùng người chưa được xác nhận là đã giải quyết; không tự xóa.
-- Nhãn các ảnh 006 và 031 không thay đổi. Bộ sửa mới vẫn 5 ảnh/99 annotations; Rework được giữ nguyên.
-
-## Cập nhật bản QC_Review ngày 2026-11-18, 12:25
-
-- 5 ảnh/98 annotations. So với bản trước, chỉ xóa khung three_wheeler nhỏ bao mui ở img_035; khung lớn bao xe được giữ, đã xác minh bằng đối chiếu file.
-- img_014: học viên xác nhận hai khung nghi trùng thuộc hai người khác nhau; giữ cả hai, đóng nghi vấn theo xác nhận của học viên (không khẳng định AI tự phân biệt được từ ảnh nhỏ).
-- img_003: khung đã mở lên tới mái, nhưng cạnh trái hiện x=291.08 còn cắt phần mái vươn trái tới khoảng x=240; phần mái phải cũng cần đối chiếu sát mép. Cần chỉnh khung bao trọn mái gắn liền. Vị trí đề xuất chỉ là chỉ dẫn, phải căn theo biên vật trên ảnh gốc.
-- Không chỉnh nhãn thay học viên. Giữ Rework vì còn khung cần hoàn thiện; không báo 0 lỗi sau sửa.
-
-## Kết quả đối chiếu bản ngày 2026-11-18, 12:32
-
-- 5 ảnh QC có 98 annotations. So với bản 12:25, chỉ khung xe img_003 thay đổi: bbox [243.1,109.8,501.0,514.2], đã nới trái lấy phần mái từng bị cắt.
-- Các điểm đã nêu cụ thể trong lượt tái kiểm đã được xử lý/đối chiếu: img003 chỉnh mái, img035 loại khung mui dư, img014 giữ hai người theo xác nhận của học viên.
-- Không thấy lỗi rõ ràng mới trong lượt rà tổng thể 5 ảnh; không coi đây là chứng minh 0 lỗi, đo tỷ lệ lỗi sau sửa, hoặc kiểm tra độc lập toàn bộ 24 ảnh.
-- Nhãn sửa đã gộp vào bộ release 24 ảnh/548 annotations. Giữ nguyên kết quả QC ban đầu 16/109 và 5/5, kết quả bẫy ban đầu 8/12. Quyết định của học viên vẫn là Rework; chưa tự nâng lên Release.
+- Tôi dùng ChatGPT/Codex để hướng dẫn thao tác, kiểm tra file, chạy script, đối chiếu thay đổi và diễn đạt các nhận xét tôi cung cấp. Tôi trực tiếp gán gold, review, quan sát mask, đưa quyết định calibration và xác nhận lỗi QC. Lượt xem lại 5 ảnh có AI hỗ trợ được ghi riêng, không nhận là QC độc lập bằng người.
+- Gold không bị xem nhãn máy hoặc nhờ AI nhận vật trước khi tôi gán và xuất xong 4 ảnh, theo xác nhận của tôi.
+- Máy Windows, Intel UHD Graphics; model chạy Colab Tesla T4. CVAT Docker v2.82.0. Lỗi 500 khi tạo Project do server v2.81.0 không khớp cơ sở dữ liệu đã cập nhật bằng v2.82.0 được xử lý bằng sao lưu rồi đưa server về v2.82.0.
+- Dùng kết quả model chạy thật trên Colab, không dùng `data/cache/`. Giữ thời gian/lượt chạy thật; không bổ sung thời gian sửa khi chưa ghi nhận.
+- Không sửa thuật toán hoặc sửa tay kết quả script. Từng có khác biệt khung tham chiếu bẫy với khung tôi vẽ ở img_004; giữ số đo thật và ghi lịch sử trong `qc/rework_notes.txt`.
+- Lần sau: định hình tiêu chuẩn gán nhãn cùng các lỗi thường gặp trước khi đánh giá AI, kiểm tra kỹ hơn và tránh chủ quan tin vào nhãn máy.
+- Trạng thái nộp: chưa xác minh đã nộp LMS.
