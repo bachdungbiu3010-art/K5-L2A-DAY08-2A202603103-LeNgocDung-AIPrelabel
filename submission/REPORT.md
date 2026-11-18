@@ -58,9 +58,12 @@ Các nhận xét dưới đây tổng hợp từ quan sát và phản hồi củ
 
 ## 6. Calibration (Part 6)
 
-- Số quyết định: <<>> (`calibration_decisions.csv`); quan trọng nhất (dẫn `CAL-xx`): <<>>
-- Quy tắc mới đã vào `guideline_v1.1_calibrated.md`: <<>>
-- Nguyên nhân gốc: <<guideline mơ hồ / chưa nắm quy tắc / máy>>
+- Đã ghi 3 quyết định do học viên đưa ra trong `qc/calibration_decisions.csv`:
+  - CAL-01 (`loi_may`, img_013): ghi rõ mask dính người, điều chỉnh điểm gợi ý/khung cho SAM, chạy lại và kiểm tra.
+  - CAL-02 (`cau_hoi_mo`, img_003): mask xe chở trái cây gồm thân xe, thùng cố định và cả trái cây nhô ra; không thay quy tắc box.
+  - CAL-03 (`loi_may`, img_013): tìm nguyên nhân xe ba bánh bị gọi car, gán lại nhãn và ghi chi tiết lỗi; điểm cao không thay thế kiểm tra thực tế.
+- Các bổ sung đã ghi trong `guidelines/guideline_v1.1_calibrated.md`; những câu hỏi mở khác của v1.0 chưa được chốt.
+- Quyết định quan trọng nhất và nguyên nhân gốc: <<học viên bổ sung>>.
 
 ## 7. QC và quyết định (Part 6)
 
