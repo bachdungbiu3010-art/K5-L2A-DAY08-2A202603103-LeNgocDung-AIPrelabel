@@ -5,7 +5,7 @@
 - Lớp (L2 / L3 / khác): L2A
 - Tài khoản GitHub: bachdungbiu3010-art
 - Repo bài nộp (URL): https://github.com/bachdungbiu3010-art/K5-L2A-DAY08-2A202603103-LeNgocDung-AIPrelabel
-- Commit chốt bài (hash): <<>>
+- Commit chốt bài (hash): 385e0e5870ca1d0486b4871cd228af94bde5e7dd (mốc hoàn thiện báo cáo và dữ liệu; commit sau chỉ ghi lại mốc này)
 - Máy: Windows; Intel UHD Graphics (không GPU NVIDIA CUDA); model chạy Colab Tesla T4
 - CVAT (Docker): v2.82.0
 
