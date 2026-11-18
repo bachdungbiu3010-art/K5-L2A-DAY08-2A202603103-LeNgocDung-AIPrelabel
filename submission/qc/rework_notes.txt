@@ -2,3 +2,5 @@ Lượt đầu: 8/12 bẫy (66.7%), commit 04efb61; review 18:55-19:36, trừ ng
 Lượt sửa bổ sung: 11/12 (91.7%) sau khi đã được thông báo các ảnh có lỗi. Đây là kiểm tra sửa lỗi có hướng dẫn, không thay thế kết quả review ban đầu. Còn missing ở img_004 và 12 khung dưới 20px. Chưa có thời gian thực làm bổ sung.
 
 Bản xuất 12_58_13: 24 ảnh, 560 annotations; còn 1 person cao 16.2 px ở img_018, bbox=[526.66,395.84,13.88,16.2]. Script vẫn 11/12. Kiểm tra img_004 xác nhận đã có person bbox=[46.43,292.14,48.92,112.32] tại vùng bẫy missing; khung tham chiếu=[47.86,296.5,38.04,60.28]. IoU khoảng 0.417 < 0.5 nên script không tính bắt được; chưa thể kết luận người còn thiếu. Cần đối chiếu hình học bằng ảnh gốc; không chỉnh box chỉ để khớp đáp án.
+
+Bản xuất job_7_annotations_2026_11_17_13_06_01_coco 1.0.zip: 24 ảnh, 559 annotations; validate_labels --all không lỗi và không cảnh báo khung dưới 20px. review_stats sau sửa có hướng dẫn đạt 12/12; kết quả blind lượt đầu vẫn 8/12, không thay thế. Chưa có thời gian thực làm bổ sung.
