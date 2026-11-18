@@ -1,8 +1,14 @@
 image,object_id,error_type,reviewer,note
+img_003.jpg,20,thua,Lê Ngọc Dũng,Học viên xác nhận 5 khung three_wheeler bị xóa là thừa hoặc không đủ căn cứ gán; nhóm vào khung bị loại. ID của bộ QC trước sửa.
+img_003.jpg,21,thua,Lê Ngọc Dũng,Học viên xác nhận 5 khung three_wheeler bị xóa là thừa hoặc không đủ căn cứ gán; nhóm vào khung bị loại. ID của bộ QC trước sửa.
+img_003.jpg,22,thua,Lê Ngọc Dũng,Học viên xác nhận 5 khung three_wheeler bị xóa là thừa hoặc không đủ căn cứ gán; nhóm vào khung bị loại. ID của bộ QC trước sửa.
+img_003.jpg,23,sai_vi_tri_kich_thuoc,Lê Ngọc Dũng,Học viên xác nhận chỉnh khung mép trái cho sát vật hơn; ID của bộ QC trước sửa.
 img_003.jpg,24,sai_lop,Lê Ngọc Dũng,"Học viên xác nhận vật bên mép phải là xe đạp; đổi three_wheeler thành bicycle trong bản QC_Review. ID24 là ID bộ QC trước sửa, không phải ID giao diện CVAT."
+img_003.jpg,6,thua,Lê Ngọc Dũng,Học viên xác nhận 5 khung three_wheeler bị xóa là thừa hoặc không đủ căn cứ gán; nhóm vào khung bị loại. ID của bộ QC trước sửa.
+img_003.jpg,7,thua,Lê Ngọc Dũng,Học viên xác nhận 5 khung three_wheeler bị xóa là thừa hoặc không đủ căn cứ gán; nhóm vào khung bị loại. ID của bộ QC trước sửa.
+img_006.jpg,97,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
 img_014.jpg,missing_person_1,bo_sot,Lê Ngọc Dũng,"Học viên báo bỏ sót 2 người; bản QC_Review mới đã thêm 2 khung person. Mã tạm chỉ lỗi trước sửa, không phải ID CVAT."
 img_014.jpg,missing_person_2,bo_sot,Lê Ngọc Dũng,"Học viên báo bỏ sót 2 người; bản QC_Review mới đã thêm 2 khung person. Mã tạm chỉ lỗi trước sửa, không phải ID CVAT."
-img_006.jpg,97,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
 img_031.jpg,481,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
 img_035.jpg,532,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
 img_035.jpg,536,thua,Lê Ngọc Dũng,Học viên xác nhận các khung đã xóa ở ảnh này là khung thừa; ID lấy từ bộ QC trước sửa.
