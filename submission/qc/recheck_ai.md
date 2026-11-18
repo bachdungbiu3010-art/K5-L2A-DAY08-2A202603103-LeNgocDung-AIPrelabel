@@ -35,3 +35,10 @@ Có ít nhất một lỗi cần sửa và hai điểm cần đối chiếu. Ch�
 - img_035 vẫn còn hai khung three_wheeler cho cùng xe: khung nhỏ bbox [745.55,428.01,68.98,34.25] và khung lớn [747.85,428.1,64.18,108.4]. Cần bỏ khung nhỏ nếu khung lớn đã bao đủ xe.
 - img_014 không thay đổi hình học hoặc lớp so với bản QC trước. Nghi vấn trùng người chưa được xác nhận là đã giải quyết; không tự xóa.
 - Nhãn các ảnh 006 và 031 không thay đổi. Bộ sửa mới vẫn 5 ảnh/99 annotations; Rework được giữ nguyên.
+
+## Cập nhật bản QC_Review ngày 2026-11-18, 12:25
+
+- 5 ảnh/98 annotations. So với bản trước, chỉ xóa khung three_wheeler nhỏ bao mui ở img_035; khung lớn bao xe được giữ, đã xác minh bằng đối chiếu file.
+- img_014: học viên xác nhận hai khung nghi trùng thuộc hai người khác nhau; giữ cả hai, đóng nghi vấn theo xác nhận của học viên (không khẳng định AI tự phân biệt được từ ảnh nhỏ).
+- img_003: khung đã mở lên tới mái, nhưng cạnh trái hiện x=291.08 còn cắt phần mái vươn trái tới khoảng x=240; phần mái phải cũng cần đối chiếu sát mép. Cần chỉnh khung bao trọn mái gắn liền. Vị trí đề xuất chỉ là chỉ dẫn, phải căn theo biên vật trên ảnh gốc.
+- Không chỉnh nhãn thay học viên. Giữ Rework vì còn khung cần hoàn thiện; không báo 0 lỗi sau sửa.

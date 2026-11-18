@@ -1,4 +1,4 @@
 image,release_object_ids,status,issue,recommended_action,reviewer
-img_003.jpg,20,can_xac_nhan,"Khung xe chở trái cây bắt đầu ở y=315.5, không bao mái bạt phía trên (khoảng y=108). Nếu mái là bộ phận cố định của chính xe thì khung còn thiếu phần xe.","Đối chiếu cấu tạo xe; nếu mái gắn liền thì dùng một khung bao cả xe và mái, tránh vẽ riêng hai khung cho một xe.",Codex - AI-assisted
-img_014.jpg,149;159,nghi_van,Khung person nhỏ #159 nằm trong vùng đầu của khung person lớn #149; nghi trùng cùng một người đi xe ở giữa xa.,Phóng to đối chiếu từng đầu/thân; chỉ xóa khi xác nhận là cùng một người.,Codex - AI-assisted
-img_035.jpg,531;532,phat_hien,Cùng xe xích lô giữa đường bị chia thành hai khung three_wheeler: phần trên và phần dưới.,Dùng một khung three_wheeler bao toàn bộ phần xe nhìn thấy gồm mui gắn liền và bánh; bỏ khung bộ phận dư. Người vẫn là khung riêng.,Codex - AI-assisted
+img_003.jpg,6 trong bản QC mới,can_sua,Khung đã lấy phần mái trên nhưng cạnh trái x=291.08 còn cắt mái vươn tới khoảng x=240.,"Nới cạnh trái và đối chiếu cạnh phải để lấy toàn bộ mái gắn liền, giữ một khung cho toàn xe.",Codex - AI-assisted
+img_014.jpg,149;159 trong bản release trước,da_xac_nhan_boi_hoc_vien,Học viên xác nhận là hai người khác nhau.,Giữ cả hai khung person.,Lê Ngọc Dũng (xác nhận); Codex (ghi nhận)
+img_035.jpg,khung nhỏ đã xóa,da_xac_minh_sua,ZIP mới chỉ còn một khung three_wheeler cho xe xích lô giữa đường.,Giữ bản sửa; không tính là bằng chứng toàn ảnh không còn lỗi.,Codex - AI-assisted
