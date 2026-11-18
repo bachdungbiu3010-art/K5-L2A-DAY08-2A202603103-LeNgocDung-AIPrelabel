@@ -78,7 +78,7 @@ Các nhận xét dưới đây tổng hợp từ quan sát và phản hồi củ
 - Mẫu trước sửa: 5/24 ảnh batch, 0 ảnh can_review + 5 ảnh ngẫu nhiên, seed 42; 109 đối tượng. Người kiểm: Lê Ngọc Dũng, cũng là người duyệt nên chưa có kiểm tra độc lập.
 - Theo `qc/qc_review.csv` và `qc/qc_report_auto.md`: lỗi theo đối tượng 16/109=14.7%; ảnh có lỗi 5/5=100.0%. Đây là QC trước sửa.
 - Các loại lỗi: 12 khung thừa/bị loại (ví dụ img_003, img_006, img_031, img_035), 2 người bỏ sót (img_014), 1 sai lớp (img_003: three_wheeler đổi bicycle), 1 sai vị trí/kích thước (img_003). Nhóm khung bị loại gồm cả trường hợp học viên thấy chưa đủ căn cứ gán; không khẳng định đã biết lớp thật của mọi vật đó.
-- Bản sửa `labels/qc_fixed.json` có 5 ảnh, 99 đối tượng; đã bổ sung 2 person ở img_014. `release/final_det.coco.json` đã thay 5 ảnh này vào bộ 24 ảnh, tổng 549 đối tượng.
+- Bản sửa mới nhất `labels/qc_fixed.json` có 5 ảnh, 98 đối tượng; đã bổ sung 2 person ở img_014. `release/final_det.coco.json` đã thay 5 ảnh này vào bộ 24 ảnh, tổng 548 đối tượng.
 - Đã có lượt xem lại 5 ảnh sau sửa bằng Codex (AI hỗ trợ), ghi riêng ở `qc/recheck_ai.md` và `qc/recheck_ai_findings.csv`: phát hiện xe xích lô img_035 bị chia thành hai khung; cần đối chiếu thêm mái xe img_003 và nghi trùng người img_014. Đây không phải lượt tái-QC độc lập do người khác thực hiện. Không đổi phiếu trước sửa thành không lỗi và không coi kiểm tra JSON là chứng minh chất lượng nhãn đã đạt.
 - Mẫu chỉ có 5 ảnh; Wilson cận trên 95% của tỷ lệ ảnh lỗi trước sửa là 100%. Không thể dùng mẫu này chứng minh tỷ lệ lỗi toàn bộ bộ ảnh <=2%.
 - Script kiểm tra cấu trúc, ảnh/lớp, kích thước box và tính số liệu từ phiếu. Script không tự xác minh lớp thực, độ ôm sát, bỏ sót cùng máy, hoặc người học đã thực hiện đủ checklist.
@@ -112,3 +112,10 @@ Cập nhật tái kiểm 2026-11-18: đã xem lại 5 ảnh sau sửa bằng AI 
 - img_014: học viên xác nhận hai khung nghi trùng thuộc hai người khác nhau; giữ cả hai, đóng nghi vấn theo xác nhận của học viên (không khẳng định AI tự phân biệt được từ ảnh nhỏ).
 - img_003: khung đã mở lên tới mái, nhưng cạnh trái hiện x=291.08 còn cắt phần mái vươn trái tới khoảng x=240; phần mái phải cũng cần đối chiếu sát mép. Cần chỉnh khung bao trọn mái gắn liền. Vị trí đề xuất chỉ là chỉ dẫn, phải căn theo biên vật trên ảnh gốc.
 - Không chỉnh nhãn thay học viên. Giữ Rework vì còn khung cần hoàn thiện; không báo 0 lỗi sau sửa.
+
+## Kết quả đối chiếu bản ngày 2026-11-18, 12:32
+
+- 5 ảnh QC có 98 annotations. So với bản 12:25, chỉ khung xe img_003 thay đổi: bbox [243.1,109.8,501.0,514.2], đã nới trái lấy phần mái từng bị cắt.
+- Các điểm đã nêu cụ thể trong lượt tái kiểm đã được xử lý/đối chiếu: img003 chỉnh mái, img035 loại khung mui dư, img014 giữ hai người theo xác nhận của học viên.
+- Không thấy lỗi rõ ràng mới trong lượt rà tổng thể 5 ảnh; không coi đây là chứng minh 0 lỗi, đo tỷ lệ lỗi sau sửa, hoặc kiểm tra độc lập toàn bộ 24 ảnh.
+- Nhãn sửa đã gộp vào bộ release 24 ảnh/548 annotations. Giữ nguyên kết quả QC ban đầu 16/109 và 5/5, kết quả bẫy ban đầu 8/12. Quyết định của học viên vẫn là Rework; chưa tự nâng lên Release.

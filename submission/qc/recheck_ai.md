@@ -42,3 +42,10 @@ Có ít nhất một lỗi cần sửa và hai điểm cần đối chiếu. Ch�
 - img_014: học viên xác nhận hai khung nghi trùng thuộc hai người khác nhau; giữ cả hai, đóng nghi vấn theo xác nhận của học viên (không khẳng định AI tự phân biệt được từ ảnh nhỏ).
 - img_003: khung đã mở lên tới mái, nhưng cạnh trái hiện x=291.08 còn cắt phần mái vươn trái tới khoảng x=240; phần mái phải cũng cần đối chiếu sát mép. Cần chỉnh khung bao trọn mái gắn liền. Vị trí đề xuất chỉ là chỉ dẫn, phải căn theo biên vật trên ảnh gốc.
 - Không chỉnh nhãn thay học viên. Giữ Rework vì còn khung cần hoàn thiện; không báo 0 lỗi sau sửa.
+
+## Kết quả đối chiếu bản ngày 2026-11-18, 12:32
+
+- 5 ảnh QC có 98 annotations. So với bản 12:25, chỉ khung xe img_003 thay đổi: bbox [243.1,109.8,501.0,514.2], đã nới trái lấy phần mái từng bị cắt.
+- Các điểm đã nêu cụ thể trong lượt tái kiểm đã được xử lý/đối chiếu: img003 chỉnh mái, img035 loại khung mui dư, img014 giữ hai người theo xác nhận của học viên.
+- Không thấy lỗi rõ ràng mới trong lượt rà tổng thể 5 ảnh; không coi đây là chứng minh 0 lỗi, đo tỷ lệ lỗi sau sửa, hoặc kiểm tra độc lập toàn bộ 24 ảnh.
+- Nhãn sửa đã gộp vào bộ release 24 ảnh/548 annotations. Giữ nguyên kết quả QC ban đầu 16/109 và 5/5, kết quả bẫy ban đầu 8/12. Quyết định của học viên vẫn là Rework; chưa tự nâng lên Release.

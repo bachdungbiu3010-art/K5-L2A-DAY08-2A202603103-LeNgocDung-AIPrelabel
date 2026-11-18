@@ -1,4 +1,4 @@
-image,release_object_ids,status,issue,recommended_action,reviewer
-img_003.jpg,6 trong bản QC mới,can_sua,Khung đã lấy phần mái trên nhưng cạnh trái x=291.08 còn cắt mái vươn tới khoảng x=240.,"Nới cạnh trái và đối chiếu cạnh phải để lấy toàn bộ mái gắn liền, giữ một khung cho toàn xe.",Codex - AI-assisted
-img_014.jpg,149;159 trong bản release trước,da_xac_nhan_boi_hoc_vien,Học viên xác nhận là hai người khác nhau.,Giữ cả hai khung person.,Lê Ngọc Dũng (xác nhận); Codex (ghi nhận)
-img_035.jpg,khung nhỏ đã xóa,da_xac_minh_sua,ZIP mới chỉ còn một khung three_wheeler cho xe xích lô giữa đường.,Giữ bản sửa; không tính là bằng chứng toàn ảnh không còn lỗi.,Codex - AI-assisted
+image,reference,status,verification,reviewer
+img_003.jpg,khung xe và mái,da_doi_chieu_sua,"BBox mới bắt đầu x=243.1, đã nới trái lấy phần mái từng bị cắt.",Codex - AI-assisted
+img_014.jpg,hai person từng nghi trùng,hoc_vien_xac_nhan,"Học viên xác nhận là hai người khác nhau, giữ cả hai.",Lê Ngọc Dũng (xác nhận); Codex (ghi nhận)
+img_035.jpg,khung mui và thân xích lô,da_doi_chieu_sua,Bản mới chỉ còn một three_wheeler bao mui đến bánh của xe giữa đường.,Codex - AI-assisted

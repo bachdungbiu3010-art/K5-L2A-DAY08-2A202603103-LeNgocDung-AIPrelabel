@@ -285,12 +285,12 @@
    "image_id": 1,
    "category_id": 7,
    "bbox": [
-    291.08,
-    104.6,
-    453.02,
-    519.4
+    243.1,
+    109.8,
+    501.0,
+    514.2
    ],
-   "area": 235298.59,
+   "area": 257614.2,
    "iscrowd": 0,
    "segmentation": [],
    "attributes": {
@@ -9148,19 +9148,19 @@
    "image_id": 21,
    "category_id": 1,
    "bbox": [
-    345.41,
-    134.95,
-    171.05,
-    547.05
+    902.88,
+    206.27,
+    120.94,
+    309.61
    ],
-   "area": 93572.9,
+   "area": 37444.23,
    "iscrowd": 0,
    "segmentation": [],
    "attributes": {
-    "conf": "0.79",
+    "conf": "0.93",
     "can_review": "false"
    },
-   "score": 0.79
+   "score": 0.93
   },
   {
    "id": 476,
@@ -9186,19 +9186,19 @@
    "image_id": 21,
    "category_id": 1,
    "bbox": [
-    902.88,
-    206.27,
-    120.94,
-    309.61
+    345.41,
+    134.95,
+    171.05,
+    547.05
    ],
-   "area": 37444.23,
+   "area": 93572.9,
    "iscrowd": 0,
    "segmentation": [],
    "attributes": {
-    "conf": "0.93",
+    "conf": "0.79",
     "can_review": "false"
    },
-   "score": 0.93
+   "score": 0.79
   },
   {
    "id": 478,
